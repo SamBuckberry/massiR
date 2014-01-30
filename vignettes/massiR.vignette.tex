@@ -1,0 +1,181 @@
+\documentclass{article}
+
+\usepackage{natbib}
+\usepackage{graphics}
+\usepackage{amsmath}
+\usepackage{indentfirst}
+\usepackage[utf8]{inputenc}
+
+% \VignetteIndexEntry{massiR Example}
+
+\usepackage{Sweave}
+\begin{document}
+\input{massiR.vignette-concordance}
+
+\title{massiR: MicroArray Sample Sex Identifier}
+\author{Sam Buckberry}
+\maketitle
+
+\section{The Problem}
+Given that the sex of many species is an easily observable and usually unambiguous classification, it is surprising the number of microarray datasets in public repositories that lack the associated sample sex information. Sex-biased gene expression in normal and pathological tissues is a well recognised for both sex chromosome and autosomal genes. Sex biases also exist in the prevalence and severity of many common human diseases, such as cardiovascular disease and some cancers. As sex is a potential influencing factor of both pathological and non-pathological phenotypes, gene expression analyses that do not account for sex-specific effects could fail to identify a significant proportion of genes that contribute the condition under investigation. Therefore, the absence of sample sex information restricts the reuse of gene expression datasets where the researcher intends to factor the effect of sex in reanalysis or reinterpretation, or when intending to include such datasets in larger gene expression meta-analyses. 
+
+This is why we developed MASSI, an R package for predicting the sex of samples in microarray datasets. The massi package allows researchers to expand their analyses to retrospectively incorporate sex as a variable, generate or confirm sex information associated with publicly available datasets, or to accurately predict the sex of samples missing sex information.
+\clearpage
+
+\section{Importing data to use in the massiR analysis}
+The massi analysis begins by importing a standard gene expression data of normalised and log transformed probe values. The gene expression data can be in the form of a data.frame object and have the sample identifiers as the column names and the probe identifiers as the row names, or as an ExpressionSet object. The Y chromosome probe identifiers must be as a data.frame object with the probe identifiers as row.names.   
+
+To load the included test massi gene expression matrix:
+\begin{Schunk}
+\begin{Sinput}
+> library(massiR)
+> data(massi.test.dataset)
+\end{Sinput}
+\end{Schunk}
+The included gene expression matrix is composed of 60 samples and 1026 probes as a data.frame object.
+
+To load the test probe list corresponding to the included data:
+\begin{Schunk}
+\begin{Sinput}
+> data(massi.test.probes)
+\end{Sinput}
+\end{Schunk}
+The Included list of Y chromosome probes contains 56 probe identifiers as row.names as a data.frame object.
+
+\section{Extracting the Y chromosome probe data}
+The first step of the massiR analysis involves extracting the expression values for probes that correspond to Y chromosome genes. When the expression values for Y chromosome probes are extracted, the expression variance for each probe across all samples is calculated. This allows the identification of low variance probes, which are unlikely to be informative in sex classification. The user has the option of selecting a probe variation threshold, so only the most informative probes are used in the classification process. Deciding on a probe variation threshold can be informed by inspecting the automatically generated probe variation plot (Figure 1). In our experience, using the most variable 25-50\% of probes (typically 10-40 probes, depending on platform) produces good results. 
+
+To extract data corresponsing to Y chromosome probes from the test dataset and look at a probe variation plot:
+
+\begin{Schunk}
+\begin{Sinput}
+> massi.y.out <- massi.y(massi.test.dataset, massi.test.probes)
+\end{Sinput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+> massi.y.plot(massi.y.out)
+\end{Sinput}
+\end{Schunk}
+
+The plot pictured in Figure 1 is output to the R graphics device.
+
+\begin{figure}
+\begin{center}
+\includegraphics{massiR.vignette-fig1}
+\end{center}
+\caption{Expression variation (CV) of Y chromosome probes across all samples}
+\label{fig:fig1}
+\end{figure}
+
+\clearpage
+
+At this data extraction step, you have the option of using you own list of probes corresponding to Y chromosome genes or using the probe lists included with the package. The included lists correspond to popular microarray platforms and contain identifiers for probes that map uniquely to Y chromosome genes.
+
+To load all the included probe lists:
+\begin{Schunk}
+\begin{Sinput}
+>  data(y.probes)
+\end{Sinput}
+\end{Schunk}
+
+After viewing the probe variation plot, a decision can be made regarding which probes to use in the clustering step. The massiR package includes methods for selecting probe variation thresholds based on quantiles. The threshold can be determined by quantiles of probe variance (CV): 1=All probes, 2=Upper 75\%, 3=Upper 50\%, 4=Upper 25\%. It is highly recommended that probe CV plot generated using the massi.y function be inspected to inform threshold choice (Figure 1). Default=3. If the total number of Y chromosome probes in the dataset is less than 10, consider using a threshold of 1 (all probes).
+
+Once a probe threshold has been decided upon, run the massi.select function. This will return a data.frame with the samples as columns and the subset of selected y chromosome probes as row names.
+
+\begin{Schunk}
+\begin{Sinput}
+> massi.select.out <- 
++   massi.select(massi.test.dataset, massi.test.probes, threshold=4)
+\end{Sinput}
+\end{Schunk}
+
+For further details on the included probe lists and corresponding platforms, refer to the massi manual.
+
+For instructions on obtaining probe identifiers for other platforms, see the section "Using biomaRt to obtain y chromosome probe lists"
+
+\section{Predicting the sex of samples}
+
+To classify samples as either male or female, clustering is performed using the values from the subset of Y chromosome probes  by implementing the partitioning around medoids algorithm to perform k-medoids clustering (Hennig 2013), where samples are assigned to one of two clusters. The two clusters are then compared using the probe expression values across all samples in each cluster. Samples within the cluster featuring the highest Y chromosome probe values are classed as male and those amongst the cluster with the lowest Y probe values classed as female. Results such sample probe mean, standard deviation and z-scores are reported in a table together with the sex predicted for each sample.
+
+To predict the sex of the samples:
+\begin{Schunk}
+\begin{Sinput}
+> results <- massi.cluster(massi.select.out)
+\end{Sinput}
+\end{Schunk}
+
+Extract the results for each sample:
+\begin{Schunk}
+\begin{Sinput}
+> sample.results <- data.frame(results[[2]])
+\end{Sinput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+> head(sample.results)
+\end{Sinput}
+\begin{Soutput}
+  sample_ID mean_y_probes_value y_probes_sd sample_z_score sample_sex
+1       S10            6.749520   0.8418586      0.7635561       male
+2       S11            5.689586   0.4750484     -1.1143145     female
+3       S12            6.702993   0.7894613      0.6920061       male
+4       S13            5.838450   0.6759924     -0.7272448     female
+5       S14            5.819845   0.6593184     -0.7607977     female
+6       S15            5.873285   0.8299253     -0.5544343     female
+\end{Soutput}
+\end{Schunk}
+
+As you can see, we can easily generate a table with the predicted sex of each sample, along with other metrics.
+
+\section{Visualising the results}
+
+The results of the massi analysis can easily be visualied using the massi.cluster.plot function and the data values derived from the previous steps. 
+To run the massi.plot function:
+\begin{Schunk}
+\begin{Sinput}
+> massi.cluster.plot(massi.select.out, results)
+\end{Sinput}
+\end{Schunk}
+This will produce a bar plot of mean values from the subset of Y chromosome probes used in K-medoids clustering (Figure 2), with the bar colours representing clusters with female as red and male as green. This wil also generate a heatmap with dendrogram of Y chromosome probes as rows and individual samples in columns (Figure 3) and a principal component plot showing clusters (Figure 4). 
+\clearpage
+
+\begin{figure}
+\begin{center}
+\includegraphics{massiR.vignette-fig2}
+\end{center}
+\caption{Mean values of the subset of Y chromosome probes used in K-medoids clustering. The bar colours represent clusters, which were assigned as female (red) and male (green)}
+\label{fig:fig2}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics{massiR.vignette-fig3}
+\end{center}
+\caption{Heat map with dendrogram of Y chromosome probes as rows and individual samples in columns}
+\label{fig:fig3}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics{massiR.vignette-fig4}
+\end{center}
+\caption{Principal component analysis plot of male and female clusters}
+\label{fig:fig4}
+\end{figure}
+
+\clearpage
+
+\section{Checking for a potential sex bias in the dataset}
+
+\section{Using biomaRt}
+
+
+
+\clearpage
+
+\section{References}
+Henning, C. (2013) fpc: Flexible procedures for clustering. R package version 2.1-5. http://CRAN.R-project.org/package=fpc
+\end{document}
