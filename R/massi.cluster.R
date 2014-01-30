@@ -33,7 +33,7 @@ massi.cluster <- function(y.data){
   sample.sex$kmedoids.sex[sample.sex$kmedoids.sex == "1"] <- c1.sex
   sample.sex$kmedoids.sex[sample.sex$kmedoids.sex == "2"] <- c2.sex
   
-  sample.sd <- data.frame(sapply(y.data.subset[-1], FUN=sd)) ## add sample sd to output
+  sample.sd <- data.frame(sapply(y.data.subset, FUN=sd)) ## add sample sd to output
   
   sample.sd$ID <- row.names(sample.sd)
   
@@ -45,7 +45,7 @@ massi.cluster <- function(y.data){
   massi.results$sapply.y.data.subset..1...FUN...sd. <- NULL
   
   # add sample average z-score
-  z.score <- scale(t(y.data.subset[-1]))
+  z.score <- scale(t(y.data.subset))
   z.score.mean <- data.frame(rowMeans(z.score))
   z.score.mean$ID <- row.names(z.score.mean)
   massi.results <- merge(massi.results, z.score.mean, by="ID")
@@ -59,3 +59,4 @@ massi.cluster <- function(y.data){
   return(list("cluster.data" = y.kmedoids, "massi.results" = massi.results))
 
 }
+
