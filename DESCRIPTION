@@ -1,4 +1,4 @@
-Package: massi
+Package: massiR
 Type: Package
 Title: massiR: MicroArray Sample Sex Identifier
 Version: 0.99.0
