@@ -6,11 +6,11 @@
 \usepackage{indentfirst}
 \usepackage[utf8]{inputenc}
 
-% \VignetteIndexEntry{massiR Example}
+% \VignetteIndexEntry{massiR_Example}
 
 \usepackage{Sweave}
 \begin{document}
-\input{massiR.vignette-concordance}
+\input{massiR_vignette-concordance}
 
 \title{massiR: MicroArray Sample Sex Identifier}
 \author{Sam Buckberry}
@@ -59,11 +59,12 @@ To extract data corresponsing to Y chromosome probes from the test dataset and l
 \end{Sinput}
 \end{Schunk}
 
-The plot pictured in Figure 1 is output to the R graphics device.
+The plot pictured below is output to the R graphics device.
 
+\setkeys{Gin}{width=1\linewidth}
 \begin{figure}
 \begin{center}
-\includegraphics{massiR.vignette-fig1}
+\includegraphics{massiR_vignette-fig1}
 \end{center}
 \caption{Expression variation (CV) of Y chromosome probes across all samples}
 \label{fig:fig1}
@@ -71,7 +72,7 @@ The plot pictured in Figure 1 is output to the R graphics device.
 
 \clearpage
 
-At this data extraction step, you have the option of using you own list of probes corresponding to Y chromosome genes or using the probe lists included with the package. The included lists correspond to popular microarray platforms and contain identifiers for probes that map uniquely to Y chromosome genes.
+You have the option of using you own list of probes corresponding to Y chromosome genes or using the probe lists included with the package. The included lists correspond to popular microarray platforms and contain identifiers for probes that map uniquely to Y chromosome genes.
 
 To load all the included probe lists:
 \begin{Schunk}
@@ -79,8 +80,21 @@ To load all the included probe lists:
 >  data(y.probes)
 \end{Sinput}
 \end{Schunk}
+Check the names of the platforms for the probe lists.
+\begin{Schunk}
+\begin{Sinput}
+>   names(y.probes)
+\end{Sinput}
+\begin{Soutput}
+[1] "illumina_humanwg_6_v1" "illumina_humanwg_6_v2" "illumina_humanwg_6_v1"
+[4] "illumina_humanht_12"   "affy_hugene_1_0_st_v1" "affy_hg_u133_plus_2"  
+\end{Soutput}
+\end{Schunk}
+The names of the probe lists correspond to Ensembl biomart attribute names.
 
-After viewing the probe variation plot, a decision can be made regarding which probes to use in the clustering step. The massiR package includes methods for selecting probe variation thresholds based on quantiles. The threshold can be determined by quantiles of probe variance (CV): 1=All probes, 2=Upper 75\%, 3=Upper 50\%, 4=Upper 25\%. It is highly recommended that probe CV plot generated using the massi.y function be inspected to inform threshold choice (Figure 1). Default=3. If the total number of Y chromosome probes in the dataset is less than 10, consider using a threshold of 1 (all probes).
+After viewing the probe variation plot, a decision can be made regarding which probes to use in the clustering step. The massiR package includes methods for selecting probe variation thresholds based on quantiles. The threshold can be determined by quantiles of probe variance (CV): 1=All probes, 2=Upper 75\%, 3=Upper 50\%, 4=Upper 25\%. It is highly recommended that probe CV plot generated using the massi.y.plot function be inspected to inform threshold choice (Figure 1). The default threshold value is 3.
+
+
 
 Once a probe threshold has been decided upon, run the massi.select function. This will return a data.frame with the samples as columns and the subset of selected y chromosome probes as row names.
 
@@ -90,8 +104,6 @@ Once a probe threshold has been decided upon, run the massi.select function. Thi
 +   massi.select(massi.test.dataset, massi.test.probes, threshold=4)
 \end{Sinput}
 \end{Schunk}
-
-For further details on the included probe lists and corresponding platforms, refer to the massi manual.
 
 For instructions on obtaining probe identifiers for other platforms, see the section "Using biomaRt to obtain y chromosome probe lists"
 
@@ -128,7 +140,7 @@ Extract the results for each sample:
 \end{Soutput}
 \end{Schunk}
 
-As you can see, we can easily generate a table with the predicted sex of each sample, along with other metrics.
+As you can see, it is a relatively straighforward proceedure to produce a table with the predicted sex of each sample.
 
 \section{Visualising the results}
 
@@ -144,38 +156,58 @@ This will produce a bar plot of mean values from the subset of Y chromosome prob
 
 \begin{figure}
 \begin{center}
-\includegraphics{massiR.vignette-fig2}
+\includegraphics{massiR_vignette-fig2}
 \end{center}
-\caption{Mean values of the subset of Y chromosome probes used in K-medoids clustering. The bar colours represent clusters, which were assigned as female (red) and male (green)}
+\caption{Heat map with dendrogram of Y chromosome probes as rows and individual samples in columns}
 \label{fig:fig2}
 \end{figure}
 
 \begin{figure}
 \begin{center}
-\includegraphics{massiR.vignette-fig3}
+\includegraphics{massiR_vignette-fig3}
 \end{center}
-\caption{Heat map with dendrogram of Y chromosome probes as rows and individual samples in columns}
+\caption{Mean values of the subset of Y chromosome probes used in K-medoids clustering. The bar colours represent clusters, which were assigned as female (red) and male (green)}
 \label{fig:fig3}
 \end{figure}
 
 \begin{figure}
 \begin{center}
-\includegraphics{massiR.vignette-fig4}
+\includegraphics{massiR_vignette-fig4}
 \end{center}
-\caption{Principal component analysis plot of male and female clusters}
+\caption{Principal component plot of male and female clusters}
 \label{fig:fig4}
 \end{figure}
 
 \clearpage
 
-\section{Checking for a potential sex bias in the dataset}
+\section{Check for potential sex bias using the dip test}
 
-\section{Using biomaRt}
-
-
+\section{Using biomaRt to obtain y chromosome probe lists}
 
 \clearpage
 
 \section{References}
-Henning, C. (2013) fpc: Flexible procedures for clustering. R package version 2.1-5. http://CRAN.R-project.org/package=fpc
+  Christian Hennig (2013). fpc: Flexible procedures for clustering.
+  R package version 2.1-6.
+  http://CRAN.R-project.org/package=fpc
+  
+  Martin Maechler (2013). diptest: Hartigan's dip test statistic for unimodality - 
+  corrected code.
+  R package version 0.75-5. http://CRAN.R-project.org/package=diptest
+  
+  Gregory R. Warnes, Ben Bolker, Lodewijk Bonebakker, Robert Gentleman,
+  Wolfgang Huber Andy Liaw, Thomas Lumley, Martin Maechler, Arni Magnusson,
+  Steffen Moeller, Marc Schwartz and Bill Venables (2013).
+  gplots: Various R programming tools for plotting data.
+  R package version 2.12.1.
+  http://CRAN.R-project.org/package=gplots
+  
+  Mapping identifiers for the integration of genomic datasets with the R/Bioconductor package biomaRt.
+  Steffen Durinck, Paul T. Spellman, Ewan Birney and Wolfgang Huber, Nature Protocols 4, 1184-1191
+  (2009).
+
+  BioMart and Bioconductor: a powerful link between biological databases and microarray data analysis.
+  Steffen Durinck, Yves Moreau, Arek Kasprzyk, Sean Davis, Bart De Moor, Alvis Brazma and Wolfgang
+  Huber, Bioinformatics 21, 3439-3440 (2005).
+  
 \end{document}

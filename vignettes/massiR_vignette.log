@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2014.1.29)  30 JAN 2014 11:45
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2014.1.29)  30 JAN 2014 14:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**massiR.vignette.tex
-(./massiR.vignette.tex
+**massiR_vignette.tex
+(./massiR_vignette.tex
 LaTeX2e <2011/06/27>
 Babel <3.9f> and hyphenation patterns for 78 languages loaded.
 (/usr/local/texlive/2013/texmf-dist/tex/latex/base/article.cls
@@ -535,8 +535,8 @@ LaTeX Font Info:    Try loading font information for T1+aer on input line 100.
 (/usr/local/texlive/2013/texmf-dist/tex/latex/ae/t1aer.fd
 File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
 ))))
-(./massiR.vignette.aux)
-\openout1 = `massiR.vignette.aux'.
+(./massiR_vignette.aux)
+\openout1 = `massiR_vignette.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
@@ -619,7 +619,7 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-(./massiR.vignette-concordance.tex) [1
+(./massiR_vignette-concordance.tex) [1
 
 {/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Try loading font information for T1+aett on input line 30.
@@ -627,93 +627,72 @@ LaTeX Font Info:    Try loading font information for T1+aett on input line 30.
 (/usr/local/texlive/2013/texmf-dist/tex/latex/ae/t1aett.fd
 File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
 )
+<massiR_vignette-fig1.pdf, id=11, 433.62pt x 433.62pt>
+File: massiR_vignette-fig1.pdf Graphic file (type pdf)
 
-LaTeX Warning: File `massiR.vignette-fig1' not found on input line 66.
+<use massiR_vignette-fig1.pdf>
+Package pdftex.def Info: massiR_vignette-fig1.pdf used on input line 67.
+(pdftex.def)             Requested size: 345.0pt x 345.01738pt.
+ [2
 
-
-! LaTeX Error: Unknown graphics extension: .vignette-fig1.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.66 \includegraphics{massiR.vignette-fig1}
-                                           
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[2
-
-] [3] [4
+] [3 <./massiR_vignette-fig1.pdf>] [4
 
 ]
-Overfull \hbox (22.24443pt too wide) in paragraph at lines 135--138
+Overfull \hbox (22.24443pt too wide) in paragraph at lines 147--150
 []\T1/aer/m/n/10 The re-sults of the massi anal-y-sis can eas-ily be vi-su-alie
 d us-ing the massi.cluster.plot
  []
 
-[5]
+[5] <massiR_vignette-fig2.pdf, id=31, 433.62pt x 433.62pt>
+File: massiR_vignette-fig2.pdf Graphic file (type pdf)
 
-LaTeX Warning: File `massiR.vignette-fig2' not found on input line 147.
+<use massiR_vignette-fig2.pdf>
+Package pdftex.def Info: massiR_vignette-fig2.pdf used on input line 159.
+(pdftex.def)             Requested size: 345.0pt x 345.01738pt.
 
+<massiR_vignette-fig3.pdf, id=32, 433.62pt x 433.62pt>
+File: massiR_vignette-fig3.pdf Graphic file (type pdf)
 
-! LaTeX Error: Unknown graphics extension: .vignette-fig2.
+<use massiR_vignette-fig3.pdf>
+Package pdftex.def Info: massiR_vignette-fig3.pdf used on input line 167.
+(pdftex.def)             Requested size: 345.0pt x 345.01738pt.
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.147 \includegraphics{massiR.vignette-fig2}
-                                            
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
+<massiR_vignette-fig4.pdf, id=33, 433.62pt x 433.62pt>
+File: massiR_vignette-fig4.pdf Graphic file (type pdf)
 
-
-LaTeX Warning: File `massiR.vignette-fig3' not found on input line 155.
-
-
-! LaTeX Error: Unknown graphics extension: .vignette-fig3.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.155 \includegraphics{massiR.vignette-fig3}
-                                            
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
+<use massiR_vignette-fig4.pdf>
+Package pdftex.def Info: massiR_vignette-fig4.pdf used on input line 175.
+(pdftex.def)             Requested size: 345.0pt x 345.01738pt.
+ [6 <./massiR_vignette-fig2.pdf>] [7 <./massiR_vignette-fig3.pdf>] [8 <./massiR
+_vignette-fig4.pdf>] [9
 
 
-LaTeX Warning: File `massiR.vignette-fig4' not found on input line 163.
-
-
-! LaTeX Error: Unknown graphics extension: .vignette-fig4.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.163 \includegraphics{massiR.vignette-fig4}
-                                            
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[6]
-Overfull \hbox (0.75421pt too wide) in paragraph at lines 171--171
-[]\T1/aer/bx/n/14.4 Checking for a po-ten-tial sex bias in the dataset 
+]
+Overfull \hbox (53.19427pt too wide) in paragraph at lines 194--197
+\T1/aer/m/n/10 ity - cor-rected code. R pack-age ver-sion 0.75-5. http://CRAN.R
+-project.org/package=diptest 
  []
 
-[7
+
+Overfull \hbox (1.00511pt too wide) in paragraph at lines 198--204
+\T1/aer/m/n/10 pro-gram-ming tools for plot-ting data. R pack-age ver-sion 2.12
+.1. http://CRAN.R-
+ []
 
 
-] [8
+Overfull \hbox (29.9151pt too wide) in paragraph at lines 205--208
+[]\T1/aer/m/n/10 Mapping iden-ti-fiers for the in-te-gra-tion of ge-nomic datas
+ets with the R/Bioconductor
+ []
 
-] (./massiR.vignette.aux) ) 
+[10
+
+] (./massiR_vignette.aux) ) 
 Here is how much of TeX's memory you used:
- 3911 strings out of 493315
- 52540 string characters out of 6137904
+ 3922 strings out of 493315
+ 52933 string characters out of 6137904
  111985 words of memory out of 5000000
- 7261 multiletter control sequences out of 15000+600000
+ 7273 multiletter control sequences out of 15000+600000
  21461 words of font info for 52 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  38i,6n,23p,1051b,280s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -724,10 +703,10 @@ amsfonts/cm/cmr12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmr17.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmsltt10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/ams
 fonts/cm/cmtt10.pfb>
-Output written on massiR.vignette.pdf (8 pages, 95768 bytes).
+Output written on massiR_vignette.pdf (10 pages, 128289 bytes).
 PDF statistics:
- 56 PDF objects out of 1000 (max. 8388607)
- 38 compressed objects within 1 object stream
+ 88 PDF objects out of 1000 (max. 8388607)
+ 60 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 5 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 25 words of extra memory for PDF output out of 10000 (max. 10000000)
 
