@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{indentfirst}
 \usepackage[utf8]{inputenc}
+\usepackage{color}
 
 % \VignetteIndexEntry{massiR_Example}
 
@@ -33,6 +34,7 @@ The included gene expression matrix is composed of 60 samples and 1026 probes as
 
 To load the test probe list corresponding to the included data:
 <<load the test probe list>>=
+library(massiR)
 data(massi.test.probes)
 @
 The Included list of Y chromosome probes contains 56 probe identifiers as row.names as a data.frame object.
@@ -93,8 +95,6 @@ Check the names of the platforms for the probe lists.
 The names of the probe lists correspond to Ensembl biomart attribute names.
 
 After viewing the probe variation plot, a decision can be made regarding which probes to use in the clustering step. The massiR package includes methods for selecting probe variation thresholds based on quantiles. The threshold can be determined by quantiles of probe variance (CV): 1=All probes, 2=Upper 75\%, 3=Upper 50\%, 4=Upper 25\%. It is highly recommended that probe CV plot generated using the massi.y.plot function be inspected to inform threshold choice (Figure 1). The default threshold value is 3.
-
-
 
 Once a probe threshold has been decided upon, run the massi.select function. This will return a data.frame with the samples as columns and the subset of selected y chromosome probes as row names.
 
@@ -190,33 +190,127 @@ massi.cluster.results <- data.frame(results[[2]])
 \clearpage
 
 \section{Check for potential sex bias using the dip test}
+The massiR method for predicting the sex of samples is >97\% accurate for datasets with 6 or more samples and with a minimum of 15\% of either males or females. As there is no guarantee that pubicly available datasets will fall within these limits, the function massi.dip can be used to test if the dataset might fall outside these bounds. 
+\paragraph{} \hspace{0pt} \\
+The massiR method was tested emperical datasets for five different human tissues. Individual data subsets were randomly generated for each tissue dataset ranging from 6-50 samples and with a wide-range of different sex ratios. The results of this testing suggest for datasets with >10 samples a dip statistic result of >0.08 suggests there is at least 15\% of males or females in the dataset. 
 
+To use massi.dip function, which calculates the dip statistic using the out of the massi.select function:
+<<massi.dip, >>=
+dip.result <- massi.dip(massi.select.out)
+@
+
+This returns the message:
+{\color{red}dip test statistic is >0.08. This suggests that the proportion of male and female samples in this dataset is relatively balanced}
+\paragraph{} \hspace{0pt} \\
+
+The results can also be viewed as a density plot (figure 5) and a histogram plot (figure 6) which enables you to see if there is evidence of the expected bi-modal distribution, which is expected if these are both males and females in the dataset.
+
+\begin{figure}
+\begin{center}
+<<label=fig5, fig=TRUE>>=
+dip.result <- massi.dip(massi.select.out)
+plot(dip.result[[3]])
+@
+\end{center}
+\caption{Density plot of mean y chromosome probe z-scores}
+\label{fig:fig5}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+<<label=fig6, fig=TRUE>>=
+dip.result <- massi.dip(massi.select.out)
+hist(x=dip.result[[2]], breaks=20)
+@
+\end{center}
+\caption{Histogram of mean y chromosome probe z-scores}
+\label{fig:fig6}
+\end{figure}
+\clearpage
+If the dataset was has a sex bias that may influence the accuracy of the massi sex prediction, then the massi.dip fuunction may return a dip statistic of <0.08. For example, if the massiR test dataset is subset to 20 samples composed of 10\% males, we see that the dip statistic returned is 0.614.
+<<results=hide>>=
+# Get male sample id's
+male.ids <-
+  subset(sample.results$sample_ID,
+                   subset=sample.results$sample_sex=="male")
+
+# Get female sample id's
+female.ids <-
+  subset(sample.results$sample_ID,
+         subset=sample.results$sample_sex=="female")
+
+# create a data subsest of 20 samples with 10% males
+bias.subset.ids <- c(female.ids[1:18], male.ids[1:2])
+
+bias.subset <- massi.select.out[bias.subset.ids]
+
+massi.dip(bias.subset)
+
+@
+Please note that a dip >0.08 is a good indication that there is not a sex bias present that will affect the accuracy of the massiR method. However, and dip statistic <0.08 may stil be returned for datasets with >15\% males or female or datasets that a suitable for massiR analysis, therefore the results of the massi.dip function should be interpreted with caustion and in light of the massi.cluster results.
+
+\clearpage
 \section{Using biomaRt to obtain y chromosome probe lists}
+Obtaining y chomomsome probes lists for many microarray platforms is relatively easy using the biomaRt package. This method is reccomended because Ensembl have mapped probe sequences to reference genomes for many platforms and this allows ambiguous and non-specific probes to be removed. 
 
+For example, to download the probes corresponding the massiR test dataset, which was obtained from an Illumina v2 array platform and convert these into a format for a massiR analysis:
+<<eval=FALSE>>=
+library(biomaRt)
+
+# Use biomaRt to download genomic regions for Illumina v2 probes
+mart <- useMart('ensembl', dataset="hsapiens_gene_ensembl")
+filters <- listFilters(mart)
+attributes <- listAttributes(mart)
+
+gene.attributes <- 
+ getBM(mart=mart, values=TRUE,
+       filters=c("with_illumina_humanwg_6_v2"),
+       attributes= c("illumina_humanwg_6_v2", 
+                      "chromosome_name", "start_position",
+                      "end_position", "strand"))
+
+# remove the probes maspped to multiple genomic regions
+unique.probe <- 
+  subset(gene.attributes, subset=!duplicated(gene.attributes[,1]))
+
+# select the probes that correspond to y chromosome genes
+y.unique <- 
+  subset(unique.probe, subset=unique.probe$chromosome_name == "Y")
+
+# get the probe id's as row.names in the format for massiR analysis
+illumina.v2.probes <- 
+  data.frame(row.names=y.unique$illumina_humanwg_6_v2)
+@
 \clearpage
 
 \section{References}
-  Christian Hennig (2013). fpc: Flexible procedures for clustering.
+\paragraph{} \hspace{0pt} \\
+  Christian Hennig (2013)
+  fpc: Flexible procedures for clustering.
   R package version 2.1-6.
   http://CRAN.R-project.org/package=fpc
-  
-  Martin Maechler (2013). diptest: Hartigan's dip test statistic for unimodality - 
-  corrected code.
-  R package version 0.75-5. http://CRAN.R-project.org/package=diptest
-  
+\paragraph{} \hspace{0pt} \\
+  Martin Maechler (2013)
+  diptest: Hartigan's dip test statistic for unimodality - corrected
+  code. R package version 0.75-5.
+  http://CRAN.R-project.org/package=diptest
+\paragraph{} \hspace{0pt} \\
   Gregory R. Warnes, Ben Bolker, Lodewijk Bonebakker, Robert Gentleman,
-  Wolfgang Huber Andy Liaw, Thomas Lumley, Martin Maechler, Arni Magnusson,
-  Steffen Moeller, Marc Schwartz and Bill Venables (2013).
+  Wolfgang Huber, Andy Liaw, Thomas Lumley, Martin Maechler,
+  Arni Magnusson, Steffen Moeller, Marc Schwartz and
+  Bill Venables (2013).
   gplots: Various R programming tools for plotting data.
-  R package version 2.12.1.
-  http://CRAN.R-project.org/package=gplots
-  
-  Mapping identifiers for the integration of genomic datasets with the R/Bioconductor package biomaRt.
-  Steffen Durinck, Paul T. Spellman, Ewan Birney and Wolfgang Huber, Nature Protocols 4, 1184-1191
-  (2009).
-
-  BioMart and Bioconductor: a powerful link between biological databases and microarray data analysis.
-  Steffen Durinck, Yves Moreau, Arek Kasprzyk, Sean Davis, Bart De Moor, Alvis Brazma and Wolfgang
-  Huber, Bioinformatics 21, 3439-3440 (2005).
+  R package version 2.12.1. http://CRAN.R-project.org/package=gplots
+\paragraph{} \hspace{0pt} \\
+  Steffen Durinck, Paul T. Spellman, Ewan Birney and Wolfgang Huber (2009)
+  Mapping identifiers for the integration of genomic datasets
+  with the R/Bioconductor package biomaRt.
+  Nature Protocols 4, 1184-1191.
+\paragraph{} \hspace{0pt} \\
+  Steffen Durinck, Yves Moreau, Arek Kasprzyk, Sean Davis,
+  Bart De Moor, Alvis Brazma and Wolfgang Huber (2005)
+  BioMart and Bioconductor: a powerful link between biological databases
+  and microarray data analysis.
+  Bioinformatics 21, 3439-3440.
   
 \end{document}

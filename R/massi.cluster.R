@@ -57,6 +57,5 @@ massi.cluster <- function(y.data){
   
   colnames(massi.results) <- c("sample_ID", "mean_y_probes_value", "y_probes_sd", "sample_z_score", "sample_sex")
   return(list("cluster.data" = y.kmedoids, "massi.results" = massi.results))
-
 }
 
