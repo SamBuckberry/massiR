@@ -11,13 +11,13 @@ massi.cluster.plot <- function(massi.select.data, massi.cluster.data) {
             key=T, trace="none", dendrogram="row", col=redgreen(75), scale="row")
   
   massi.cluster.results <- data.frame(massi.cluster.data[[2]])
-  massi.cluster.results.sort <- massi.cluster.results[order(massi.cluster.results$sample_sex),] # sort data by sex
+  massi.cluster.results.sort <- massi.cluster.results[order(massi.cluster.results$sex),] # sort data by sex
   probe.means <- massi.cluster.results.sort$mean_y_probes_value # samples probe mean values
   probe.sd <- massi.cluster.results.sort$y_probes_sd # sample probe sd values
-  sample.names <- massi.cluster.results.sort$sample_ID # set x-axis names
+  sample.names <- massi.cluster.results.sort$ID # set x-axis names
   plot.top <- ceiling(max(probe.means+probe.sd*1.1)) # set y-axis upper limit
   plot.bottom <- floor(min(probe.means-probe.sd*1.1)) # set y-axis lower limit
-  sample.sex <- massi.cluster.results.sort$sample_sex # set the factor for bar color
+  sample.sex <- massi.cluster.results.sort$sex # set the factor for bar color
   # create the plot
   barCenters <- barplot(probe.means, xpd=F, names.arg=massi.cluster.data$ID, cex.names=0.7,
                         ylab="Chr.Y mean probe value +/- SD",
