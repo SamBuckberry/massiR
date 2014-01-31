@@ -55,7 +55,7 @@ massi.cluster <- function(y.data){
   massi.results$y.kmedoids.clustering <- NULL
   massi.results$rowMeans.y.data.subset.t. <- NULL
   
-  colnames(massi.results) <- c("sample_ID", "mean_y_probes_value", "y_probes_sd", "sample_z_score", "sample_sex")
+  colnames(massi.results) <- c("ID", "mean_y_probes_value", "y_probes_sd", "z_score", "sex")
   return(list("cluster.data" = y.kmedoids, "massi.results" = massi.results))
 }
 
