@@ -16,7 +16,7 @@ massi.select(expression.data, y.probes, threshold = 3)
 The expression.data item contains normalized array expression data for all samples. This can be a data.frame with sample names as columns and probe id's as row names. This argument also allows the specification of an ExpressionSet object. 
 }
   \item{y.probes}{
-A data.frame of probe id's in one column that match y chromosome genes for the array platform.
+A data.frame of probe id's in one column that match y chromosome genes for the array platform. massiR includes probes for several Illumina and Affymetrix platforms. Details on using these probes are included in the vignette and the \code{\link{y.probes}} manual.
 }
   \item{threshold}{
 The threshold value corresponds to probe variation quantiles.
