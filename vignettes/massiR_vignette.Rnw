@@ -113,17 +113,11 @@ head(sample.results)
 
 As you can see, it is a relatively straighforward proceedure to produce a table with the predicted sex of each sample.
 
-If the expression data was in the ExpressionSet class at the start of the massiR analysis, you can easily add the sex information to the phenodata of the ExpressionSet by
-<<add_to_ExpressionSet>>=
-
-
-@
-
 \section{Visualising the results of a massiR analysis}
 
 The results of the massi analysis can easily be visualied using the massi.cluster.plot function and the data values derived from the previous steps. 
 To run the massi.plot function:
-<<results=hide>>=
+<<results=hide, eval=FALSE>>=
 massi.cluster.plot(massi.select.out, results)
 @
 This will produce a bar plot of mean values from the subset of Y chromosome probes used in K-medoids clustering (Figure 2), with the bar colours representing clusters with female as red and male as green. This wil also generate a heatmap with dendrogram of Y chromosome probes as rows and individual samples in columns (Figure 3) and a principal component plot showing clusters (Figure 4). 
@@ -143,15 +137,15 @@ ord <- order(rowSums(abs(massi.select.out)),decreasing=T)
 
 \begin{figure}
 \begin{center}
-<<label=fig3, fig=TRUE, echo=FALSE, eps=FALSE, >>=
+<<label=fig3, fig=TRUE, echo=FALSE>>=
 massi.cluster.results <- data.frame(results[[2]])
-  massi.cluster.results.sort <- massi.cluster.results[order(massi.cluster.results$sample_sex),] # sort data by sex
+  massi.cluster.results.sort <- massi.cluster.results[order(massi.cluster.results$sex),] # sort data by sex
   probe.means <- massi.cluster.results.sort$mean_y_probes_value # samples probe mean values
   probe.sd <- massi.cluster.results.sort$y_probes_sd # sample probe sd values
-  sample.names <- massi.cluster.results.sort$sample_ID # set x-axis names
+  sample.names <- massi.cluster.results.sort$ID # set x-axis names
   plot.top <- ceiling(max(probe.means+probe.sd*1.1)) # set y-axis upper limit
   plot.bottom <- floor(min(probe.means-probe.sd*1.1)) # set y-axis lower limit
-  sample.sex <- massi.cluster.results.sort$sample_sex # set the factor for bar color
+  sample.sex <- massi.cluster.results.sort$sex # set the factor for bar color
   # create the plot
   barCenters <- barplot(probe.means, xpd=F, names.arg=results$ID, cex.names=0.7,
                         ylab="Chr.Y mean probe value +/- SD",
@@ -222,46 +216,54 @@ hist(x=dip.result[[2]], breaks=20)
 \end{figure}
 \clearpage
 If the dataset was has a sex bias that may influence the accuracy of the massi sex prediction, then the massi.dip fuunction may return a dip statistic of <0.08. For example, if the massiR test dataset is subset to 20 samples composed of 10\% males, we see that the dip statistic returned is 0.614.
-<<results=hide>>=
+<<bias_dip>>=
 # Get male sample id's
 male.ids <-
-  subset(sample.results$sample_ID,
-                   subset=sample.results$sample_sex=="male")
+  subset(sample.results$ID,
+                   subset=sample.results$sex=="male")
 
 # Get female sample id's
 female.ids <-
-  subset(sample.results$sample_ID,
-         subset=sample.results$sample_sex=="female")
+  subset(sample.results$ID,
+         subset=sample.results$sex=="female")
 
 # create a data subsest of 20 samples with 10% males
 bias.subset.ids <- c(female.ids[1:18], male.ids[1:2])
 
 bias.subset <- massi.select.out[bias.subset.ids]
 
-massi.dip(bias.subset)
-
+bias.dip <- massi.dip(bias.subset)
 @
+
 Please note that a dip >0.08 is a good indication that there is not a sex bias present that will affect the accuracy of the massiR method. However, and dip statistic <0.08 may stil be returned for datasets with >15\% males or female or datasets that a suitable for massiR analysis, therefore the results of the massi.dip function should be interpreted with caustion and in light of the massi.cluster results.
 
 \section{Performing massiR analysis with an ExpressionSet object}
 
-
-To predict the sex of samples for data in an ExpressionSet object using the massiR example data.
-
-<<>>=
-
+The massiR pipeline allows the input of expression data in the class ExpressionSet. 
+Here is an example of how to use data in the ExpressionSet class in a massiR analysis:
+<<results=hide>>=
 # load the example ExpressionSet included with massiR
-data(massi.eset)
+data(massi.eset, massi.test.probes)
+@
+
+Using massiR with an ExpressionSet is the same as using a data.frame as in the above example:
+<<results=hide>>=
 # use the massi.select to extract y chromosome probe values
 eset.select.out <- 
   massi.select(massi.eset, massi.test.probes)
 # use massi.cluster to predict sex of samples
 eset.results <- 
   massi.cluster(eset.select.out)
+@
 
+Now to get the massi.cluster results and add them to the ExpressionSet:
+<<results=hide>>=
 # Get the sex for each sample from the massi.cluster results
+eset.sample.results <- 
+  data.frame(eset.results[[2]])
+
 sexData <- 
-  data.frame(eset.results[c("ID", "sex")])
+  data.frame(eset.sample.results[c("ID", "sex")])
 
 # Exrtact the order of samples in the ExpressionSet and match with results
 eset.names <- 
@@ -275,12 +277,19 @@ pData <- new("AnnotatedDataFrame", data = sexData)
 
 # add the annotatedDataFrame to the Expressionset as phenoData
 phenoData(massi.eset) <- pData
+@
 
+Check the phenoData in the ExpressionSet and double check that all sample id's from the massiR analysis match the sample identifiers in the ExpressionSet.
+
+<<>>=
 # check the phenodata is now within the ExpressionSet
-phenoData(eset)
+phenoData(massi.eset)
+@
 
-# check that all phenodata id's match expressionSet column names. 
-all(eset$ID == colnames(exprs(eset)))
+<<>>=
+# check that all phenodata id's match expressionSet column names.
+# This must return "TRUE"
+all(massi.eset$ID == colnames(exprs(massi.eset)))
 @
 
 \section{Using the included massiR y chromosome probe lists}
