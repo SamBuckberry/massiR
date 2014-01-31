@@ -19,7 +19,7 @@ List of 6
  $ affy_hg_u133_plus_2  :'data.frame':	94 obs. of  0 variables
 }
 \details{
-The y chromosome probes for each platform were downloaded from Ensembl biomart using the 'biomaRt' package. For more details on the methods of selecting the probes and how to obtain probes for other platform, see the vignette for the \code{\link{massi}} package.
+The y chromosome probes for each platform were downloaded from Ensembl biomart using the 'biomaRt' package. For more details on the methods of selecting the probes and how to obtain probes for other platform, see the vignette for the massiR package.
 }
 
 \references{
@@ -35,8 +35,9 @@ The y chromosome probes for each platform were downloaded from Ensembl biomart u
 \dontrun{
 # load the probes list
 data(y.probes)
-
-# extract the probes for illumina_humanwg_6_v2
+# look at the platform names
+names(y.probes)
+# extract the probes using the platform name
 probe.list <- y.probes[["illumina_humanwg_6_v2"]]
 
 }
