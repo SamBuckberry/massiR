@@ -316,11 +316,11 @@ For instructions on obtaining probe identifiers for other platforms, see the sec
 \section{Using biomaRt to obtain y chromosome probe lists}
 Obtaining y chomomsome probes lists for many microarray platforms is relatively easy using the biomaRt package. This method is reccomended because Ensembl have mapped probe sequences to reference genomes for many platforms and this allows ambiguous and non-specific probes to be removed. 
 
-For example, to download the probes corresponding the massiR test dataset, which was obtained from an Illumina v2 array platform and convert these into a format for a massiR analysis:
+For example, to download the probes corresponding to the massiR test dataset and obtain the Entrez gene id and genomic positions and convert these into a format for a massiR analysis:
+
+Use the biomaRt package to download genomic regions and Entrez gene id's for Illumina v2 probes:
 <<eval=FALSE>>=
 library(biomaRt)
-
-# Use biomaRt to download genomic regions for Illumina v2 probes
 mart <- useMart('ensembl', dataset="hsapiens_gene_ensembl")
 filters <- listFilters(mart)
 attributes <- listAttributes(mart)
@@ -328,22 +328,27 @@ attributes <- listAttributes(mart)
 gene.attributes <- 
  getBM(mart=mart, values=TRUE,
        filters=c("with_illumina_humanwg_6_v2"),
-       attributes= c("illumina_humanwg_6_v2", 
+       attributes= c("illumina_humanwg_6_v2", "entrezgene",
                       "chromosome_name", "start_position",
                       "end_position", "strand"))
-
-# remove the probes maspped to multiple genomic regions
+@
+Remove the probes mapped to multiple genomic regions:
+<<eval=FALSE>>=
 unique.probe <- 
   subset(gene.attributes, subset=!duplicated(gene.attributes[,1]))
-
-# select the probes that correspond to y chromosome genes
+@
+Select the probes that correspond to y chromosome genes:
+<<eval=FALSE>>=
 y.unique <- 
   subset(unique.probe, subset=unique.probe$chromosome_name == "Y")
+@
 
-# get the probe id's as row.names in the format for massiR analysis
+Get the probe id's as row.names in the format for massiR analysis:
+<<eval=FALSE>>=
 illumina.v2.probes <- 
   data.frame(row.names=y.unique$illumina_humanwg_6_v2)
 @
+
 \clearpage
 
 \section{References}
