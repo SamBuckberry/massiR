@@ -243,6 +243,46 @@ massi.dip(bias.subset)
 @
 Please note that a dip >0.08 is a good indication that there is not a sex bias present that will affect the accuracy of the massiR method. However, and dip statistic <0.08 may stil be returned for datasets with >15\% males or female or datasets that a suitable for massiR analysis, therefore the results of the massi.dip function should be interpreted with caustion and in light of the massi.cluster results.
 
+\section{Performing massiR analysis with an ExpressionSet object}
+
+
+To predict the sex of samples for data in an ExpressionSet object using the massiR example data.
+
+<<>>=
+
+# load the example ExpressionSet included with massiR
+data(massi.eset)
+# use the massi.select to extract y chromosome probe values
+eset.select.out <- 
+  massi.select(massi.eset, massi.test.probes)
+# use massi.cluster to predict sex of samples
+eset.results <- 
+  massi.cluster(eset.select.out)
+
+# Get the sex for each sample from the massi.cluster results
+sexData <- 
+  data.frame(eset.results[c("ID", "sex")])
+
+# Exrtact the order of samples in the ExpressionSet and match with results
+eset.names <- 
+  colnames(exprs(massi.eset))
+
+# match the sample order in massiR results to the same as the ExpressionSet object
+sexData <- sexData[match(eset.names, sexData$ID),]
+
+# create an annotatedDataFrame to add to ExpressionSet
+pData <- new("AnnotatedDataFrame", data = sexData)
+
+# add the annotatedDataFrame to the Expressionset as phenoData
+phenoData(massi.eset) <- pData
+
+# check the phenodata is now within the ExpressionSet
+phenoData(eset)
+
+# check that all phenodata id's match expressionSet column names. 
+all(eset$ID == colnames(exprs(eset)))
+@
+
 \section{Using the included massiR y chromosome probe lists}
 
 The massiR package includes lists of y chromsome probes for widely used Illumna and Affymetrix human gene expresssion platforms. 
