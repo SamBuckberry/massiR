@@ -191,6 +191,8 @@ The massiR method for predicting the sex of samples is >97\% accurate for data s
 \paragraph{} \hspace{0pt} \\
 The massiR method was tested using empirical data sets for five different human tissues. Individual data subsets were randomly generated for each tissue data set ranging from 6-50 samples and with a wide-range of  Male/Female ratios. The results of this testing suggest for data sets with >10 samples a dip statistic  >0.08 is indicative of at least 15\% of males or females in the data set.
 
+The massi.dip function calculates z-scores for each sample and implements the dip test to test for unimodality (Maechler 2013). As a relatively balanced dataset would typically show a bi-modal distribution of the z-scores, the dip statistic is then used to predict if a dataset shows a unimodal distribution that would  be expected if a vast majority of samples were of one sex.
+
 To use massi.dip function, which calculates the dip statistic using the data output from the massi.select function:
 <<massi.dip, >>=
 dip.result <- massi.dip(massi.select.out)
@@ -200,7 +202,7 @@ This returns the message:
 {\color{red}dip test statistic is >0.08. This suggests that the proportion of male and female samples in this data set is relatively balanced}
 \paragraph{} \hspace{0pt} \\
 
-The massi.dip function first standardizes probe expression values and calculates a z-score for each sample. The distribution of these z-scores is then tested for unimodality using the dip test (Maechler 2013). Visually inspecting this distribution as a density plot (figure 5) or a histogram plot (figure 6) enables the user to see if there is the expected bi-modal distribution  (as there should be distinct distributions for each sex).
+Visually inspecting this distribution as a density plot (figure 5) or a histogram plot (figure 6) enables the user to see if there is the expected bi-modal distribution  (as there should be distinct distributions for each sex).
 
 To produce a density plot and histogram of sample z-scores:
 \begin{figure}
