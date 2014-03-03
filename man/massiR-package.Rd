@@ -3,7 +3,7 @@
 \alias{massi}
 \docType{package}
 \title{
-GESSI: a microarry Gene Expression Sample Sex Identifier
+massiR: a microarry Gene Expression Sample Sex Identifier
 }
 \description{
 massi uses y chromosome probe information to cluster samples and predict the sex of each sample in gene expression microarray datasets.
