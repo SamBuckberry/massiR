@@ -10,8 +10,9 @@
 
 % \VignetteIndexEntry{massiR_Example}
 
+\usepackage{Sweave}
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+\input{massiR_Vignette-concordance}
 
 \title{massiR: MicroArray Sample Sex Identifier}
 \author{Sam Buckberry}
@@ -30,16 +31,20 @@ This is why we developed massiR, a package for predicting the sex of samples in 
 The massiR analysis begins by importing standard gene expression data of normalized and log transformed probe values. The gene expression data can be in the form of a data.frame object and have the sample identifiers as the column names and the probe identifiers as the row names, or as an ExpressionSet object. The identifiers for probes corresponding to Y chromosome genes must be as a data.frame object with the probe identifiers as row.names.   
 
 To load the included test massiR gene expression data:
-<<load the example data>>=
-library(massiR)
-data(massi.test.dataset)
-@
+\begin{Schunk}
+\begin{Sinput}
+> library(massiR)
+> data(massi.test.dataset)
+\end{Sinput}
+\end{Schunk}
 The included gene expression data is composed of 60 samples and 1026 probes as a data.frame object.
 
 To load the test Y chromosome probes corresponding to the included data:
-<<load the test probe list>>=
-data(massi.test.probes)
-@
+\begin{Schunk}
+\begin{Sinput}
+> data(massi.test.probes)
+\end{Sinput}
+\end{Schunk}
 The Included list of Y chromosome probes contains probe identifiers as row.names in the data.frame class.
 
 \section{Extracting the Y chromosome probe data}
@@ -50,37 +55,24 @@ When the expression values for Y chromosome probes are extracted, the expression
 
 To extract data corresponding to Y chromosome probes from the test data set and look at a probe variation plot:
 
-<<extract Y from test dataset calculate CV>>=
-massi_y_out <- massi_y(massi.test.dataset, massi.test.probes)
-@
+\begin{Schunk}
+\begin{Sinput}
+> massi_y_out <- massi_y(massi.test.dataset, massi.test.probes)
+\end{Sinput}
+\end{Schunk}
 
-<<plot the results from massi_y>>=
-massi_y_plot(massi_y_out)
-@
+\begin{Schunk}
+\begin{Sinput}
+> massi_y_plot(massi_y_out)
+\end{Sinput}
+\end{Schunk}
 
 This plot (Figure 1) is output to the R graphics device.
 
-<<label=fig1too, echo=FALSE, include=FALSE>>=
-massi_y_out <- massi_y(massi.test.dataset, massi.test.probes)
-@
 \setkeys{Gin}{width=1\linewidth}
 \begin{figure}
 \begin{center}
-<<label=fig1, fig=TRUE, echo=FALSE, eps=FALSE, >>=
-
-  barplot(height=massi_y_out[[2]], names.arg=massi_y_out[[1]], xpd=T,
-          cex.names=0.5, las=2, ylab="Probe CV (%)")
-  # Get the quantile values from the massi_y output
-  quantiles <- massi_y_out[[3]]
-  
-  # add lines for the 0%, 25%, 50%, and 75% quartiles
-  abline(h=quantiles[1:4], col=c("black", "red", "blue", "green"), lwd=2)
-  legend("topleft",cex=0.7, title="Threshold (Quantile)",
-         col=c("black", "red", "blue", "green"),
-         fill= c("black", "red", "blue", "green"),
-         legend=c("1 (0%)", "2 (25%)",
-                  "3 (50%)", "4 (75%)"))
-@
+\includegraphics{massiR_Vignette-fig1}
 \end{center}
 \caption{Expression variation (CV) of Y chromosome probes across all samples}
 \label{fig:fig1}
@@ -91,32 +83,60 @@ After viewing the probe variation plot, a decision can be made regarding which p
 
 Once a probe threshold has been decided upon, run the massi.select function. This will return a data.frame with the samples as columns and the subset of selected y chromosome probes as row names.
 
-<<run massi.select>>=
-massi_select_out <- 
-  massi_select(massi.test.dataset, massi.test.probes, threshold=4)
-@
+\begin{Schunk}
+\begin{Sinput}
+> massi_select_out <- 
++   massi_select(massi.test.dataset, massi.test.probes, threshold=4)
+\end{Sinput}
+\end{Schunk}
 Check the output for the first 5 samples:
-<<head massi select out>>=
-head(massi_select_out)[,1:5]
-@
+\begin{Schunk}
+\begin{Sinput}
+> head(massi_select_out)[,1:5]
+\end{Sinput}
+\begin{Soutput}
+                   S1       S2       S3       S4       S5
+ILMN_1670821 5.746427 5.686032 6.307110 6.179258 6.594808
+ILMN_1685690 5.459125 5.567289 6.919465 6.789817 6.559376
+ILMN_1739587 5.883483 5.764190 6.441775 6.438789 6.707278
+ILMN_1755537 5.882456 5.831844 8.133164 8.052959 8.298985
+ILMN_1772163 5.696833 5.680091 5.907170 6.017871 6.465122
+ILMN_1804958 5.815093 5.654395 5.929610 6.104089 5.868732
+\end{Soutput}
+\end{Schunk}
 
 \section{Predicting the sex of samples}
 
 To classify samples as either male or female, clustering is performed using the values from the subset of Y chromosome probes  by implementing the partitioning around medoids algorithm which performs k-medoids clustering (Hennig 2013), where samples are assigned to one of two clusters. The two clusters are then compared using the probe expression values across all samples in each cluster. Samples within the cluster featuring the highest Y chromosome probe values are classed as male and those within the cluster with the lowest Y probe values classed as female. Results such sample probe mean, standard deviation and z-scores are reported in a table together with the sex predicted for each sample.
 
 To predict the sex of the samples using massi.cluster:
-<<results = hide>>=
-results <- massi_cluster(massi_select_out)
-@
+\begin{Schunk}
+\begin{Sinput}
+> results <- massi_cluster(massi_select_out)
+\end{Sinput}
+\end{Schunk}
 
 Extract the results for each sample from the returned list:
-<<results = hide>>=
-sample.results <- data.frame(results[[2]])
-@
+\begin{Schunk}
+\begin{Sinput}
+> sample.results <- data.frame(results[[2]])
+\end{Sinput}
+\end{Schunk}
 
-<<>>=
-head(sample.results)
-@
+\begin{Schunk}
+\begin{Sinput}
+> head(sample.results)
+\end{Sinput}
+\begin{Soutput}
+   ID mean_y_probes_value y_probes_sd    z_score    sex
+1  S1            5.911089   0.4572756 -0.6453629 female
+2 S10            6.749520   0.8418586  0.7773050   male
+3 S11            5.689586   0.4750484 -1.1074329 female
+4 S12            6.702993   0.7894613  0.7045705   male
+5 S13            5.838450   0.6759924 -0.7193198 female
+6 S14            5.819845   0.6593184 -0.7524047 female
+\end{Soutput}
+\end{Schunk}
 
 As you can see, it is a relatively straightforward procedure to produce a table with the predicted sex of each sample with some basic metrics.
 
@@ -125,20 +145,18 @@ As you can see, it is a relatively straightforward procedure to produce a table 
 The massiR package includes a function which allows various aspects of the data used in the analysis to be visualized. These plots enable to used to inspect sample and clustering characteristics which could aid in identifying problematic samples and outliers.
 
 To run the massi.plot function with the output from the massi.select and massi.cluster functions:
-<<results=hide, eval=FALSE>>=
-massi_cluster_plot(massi_select_out, results)
-@
+\begin{Schunk}
+\begin{Sinput}
+> massi_cluster_plot(massi_select_out, results)
+\end{Sinput}
+\end{Schunk}
 This will generate a bar plot of mean values and standard deviation from the subset of Y chromosome probes used in K-medoids clustering (Figure 2), with the bars colored with respect to predicted sex. This function also generates a heat map with dendrogram of Y chromosome probes as rows and individual samples in columns (Figure 3) and a principal component plot showing clusters (Figure 4). These plots can iad the user in identifying sample outliers or probes that may not be informative in the clustering step. 
 
 \clearpage
 
 \begin{figure}
 \begin{center}
-<<label=fig2, fig=TRUE, echo=FALSE, eps=FALSE, >>=
-ord <- order(rowSums(abs(massi_select_out)),decreasing=T)
-  heatmap.2(x=as.matrix(massi_select_out[ord,]), keysize=2, cexRow=0.7,
-            key=T, trace="none", dendrogram="row", col=redgreen(75), scale="row")
-@
+\includegraphics{massiR_Vignette-fig2}
 \end{center}
 \caption{Heat map with dendrogram of Y chromosome probes as rows and individual samples in columns. Notice that although the values for the probe in the fifth row are reasonably variable but do not show the same pattern seen with other probes. Therefore viewing the heatmap may help identify problematic probes.}
 \label{fig:fig2}
@@ -146,26 +164,7 @@ ord <- order(rowSums(abs(massi_select_out)),decreasing=T)
 
 \begin{figure}
 \begin{center}
-<<label=fig3, fig=TRUE, echo=FALSE>>=
-massi.cluster.results <- data.frame(results[[2]])
-  massi.cluster.results.sort <- massi.cluster.results[order(massi.cluster.results$sex),] # sort data by sex
-  probe.means <- massi.cluster.results.sort$mean_y_probes_value # samples probe mean values
-  probe.sd <- massi.cluster.results.sort$y_probes_sd # sample probe sd values
-  sample.names <- massi.cluster.results.sort$ID # set x-axis names
-  plot.top <- ceiling(max(probe.means+probe.sd*1.1)) # set y-axis upper limit
-  plot.bottom <- floor(min(probe.means-probe.sd*1.1)) # set y-axis lower limit
-  sample.sex <- massi.cluster.results.sort$sex # set the factor for bar color
-  # create the plot
-  barCenters <- barplot(probe.means, xpd=F, names.arg=results$ID, cex.names=0.7,
-                        ylab="Chr.Y mean probe value +/- SD",
-                        xlab="",
-                        col=c("red", "green")[as.factor(sample.sex)],
-                        las=2, ylim=c(plot.bottom,plot.top))
-  segments(barCenters, probe.means-probe.sd, # add the sd bars
-           barCenters, probe.means+probe.sd, lwd=0.8)
-  legend("topleft", fill=c("red", "green"), title="predicted sex", ## add legend to plot
-         legend=c("female", "male"), cex=0.5, )
-@
+\includegraphics{massiR_Vignette-fig3}
 \end{center}
 \caption{Mean values of the subset of Y chromosome probes used in K-medoids clustering. The bar colors represent clusters, which were assigned as female (red) and male (green)}
 \label{fig:fig3}
@@ -173,12 +172,7 @@ massi.cluster.results <- data.frame(results[[2]])
 
 \begin{figure}
 \begin{center}
-<<label=fig4, fig=TRUE, echo=FALSE, eps=FALSE, >>=
-## generate PC plot of clusters
-  k.medoids.results <- results[[1]]
-  clusplot(t(massi_select_out), k.medoids.results$clustering, color=TRUE, shade=FALSE, main="",cex.txt=0.5,
-           labels=2, lines=0)
-@
+\includegraphics{massiR_Vignette-fig4}
 \end{center}
 \caption{Principal component plot of male and female clusters}
 \label{fig:fig4}
@@ -194,9 +188,11 @@ The massiR method was tested using empirical data sets for five different human 
 The massi.dip function calculates z-scores for each sample and implements the dip test to test for unimodality (Maechler 2013). As a relatively balanced dataset would typically show a bi-modal distribution of the z-scores, the dip statistic is then used to predict if a dataset shows a unimodal distribution that would  be expected if a vast majority of samples were of one sex.
 
 To use massi_dip function, which calculates the dip statistic using the data output from the massi_select function:
-<<massi.dip, >>=
-dip.result <- massi_dip(massi_select_out)
-@
+\begin{Schunk}
+\begin{Sinput}
+> dip.result <- massi_dip(massi_select_out)
+\end{Sinput}
+\end{Schunk}
 
 This returns the message:
 {\color{red}dip test statistic is >0.08. This suggests that the proportion of male and female samples in this data set is relatively balanced}
@@ -207,10 +203,13 @@ Visually inspecting this distribution as a density plot (figure 5) or a histogra
 To produce a density plot and histogram of sample z-scores:
 \begin{figure}
 \begin{center}
-<<label=fig5, fig=TRUE>>=
-dip.result <- massi_dip(massi_select_out)
-plot(dip.result[[3]])
-@
+\begin{Schunk}
+\begin{Sinput}
+> dip.result <- massi_dip(massi_select_out)
+> plot(dip.result[[3]])
+\end{Sinput}
+\end{Schunk}
+\includegraphics{massiR_Vignette-fig5}
 \end{center}
 \caption{Density plot of mean y chromosome probe z-scores}
 \label{fig:fig5}
@@ -218,10 +217,13 @@ plot(dip.result[[3]])
 
 \begin{figure}
 \begin{center}
-<<label=fig6, fig=TRUE>>=
-dip.result <- massi_dip(massi_select_out)
-hist(x=dip.result[[2]], breaks=20)
-@
+\begin{Schunk}
+\begin{Sinput}
+> dip.result <- massi_dip(massi_select_out)
+> hist(x=dip.result[[2]], breaks=20)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{massiR_Vignette-fig6}
 \end{center}
 \caption{Histogram of mean y chromosome probe z-scores}
 \label{fig:fig6}
@@ -232,25 +234,29 @@ If the data set was has a sex bias that may influence the accuracy of the massi 
 To create this female skewed bias:
 
 get the sample id's for the male and female samples:
-<<bias_dip>>=
-male.ids <-
-  subset(sample.results$ID,
-                   subset=sample.results$sex=="male")
-
-female.ids <-
-  subset(sample.results$ID,
-         subset=sample.results$sex=="female")
-@
+\begin{Schunk}
+\begin{Sinput}
+> male.ids <-
++   subset(sample.results$ID,
++                    subset=sample.results$sex=="male")
+> female.ids <-
++   subset(sample.results$ID,
++          subset=sample.results$sex=="female")
+\end{Sinput}
+\end{Schunk}
 Create a data subsest of 20 samples with 10\% males:
-<<>>=
-bias.subset.ids <- c(female.ids[1:18], male.ids[1:2])
-
-bias.subset <- massi_select_out[bias.subset.ids]
-@
+\begin{Schunk}
+\begin{Sinput}
+> bias.subset.ids <- c(female.ids[1:18], male.ids[1:2])
+> bias.subset <- massi_select_out[bias.subset.ids]
+\end{Sinput}
+\end{Schunk}
 Use the massi.dip function to test for sex-biased data set:
-<<>>= 
-bias.dip <- massi_dip(bias.subset)
-@
+\begin{Schunk}
+\begin{Sinput}
+> bias.dip <- massi_dip(bias.subset)
+\end{Sinput}
+\end{Schunk}
 
 Please note that a dip >0.08 is a good indication that there is not a sex bias present that will affect the accuracy of the massiR method. However, and dip statistic <0.08 may still be returned for data sets with >15\% males or female or data sets that a suitable for massiR analysis, therefore the results of the massi.dip function should be interpreted with caution and in light of the massi.cluster results.
 
@@ -260,54 +266,67 @@ The massiR pipeline allows the input of expression data in the class ExpressionS
 Here is an example of how to use data in the ExpressionSet class in a massiR analysis and how to put the results back into the ExpressionSet:
 
 Load the example ExpressionSet data included with the massiR package:
-<<results=hide>>=
-data(massi.eset, massi.test.probes)
-@
+\begin{Schunk}
+\begin{Sinput}
+> data(massi.eset, massi.test.probes)
+\end{Sinput}
+\end{Schunk}
 
 Using massiR with an ExpressionSet is the same as using a data.frame as in the above example:
-<<results=hide>>=
-eset.select.out <- 
-  massi_select(massi.eset, massi.test.probes)
-
-eset.results <- 
-  massi_cluster(eset.select.out)
-@
+\begin{Schunk}
+\begin{Sinput}
+> eset.select.out <- 
++   massi_select(massi.eset, massi.test.probes)
+> eset.results <- 
++   massi_cluster(eset.select.out)
+\end{Sinput}
+\end{Schunk}
 
 Now to get the massi.cluster results and add them to the ExpressionSet:
-<<results=hide>>=
-# Get the sex for each sample from the massi.cluster results
-eset.sample.results <- 
-  data.frame(eset.results[[2]])
-
-sexData <- 
-  data.frame(eset.sample.results[c("ID", "sex")])
-
-# Exrtact the order of samples in the ExpressionSet and match with results
-eset.names <- 
-  colnames(exprs(massi.eset))
-
-# match the sample order in massiR results to the same as the ExpressionSet object
-sexData <- sexData[match(eset.names, sexData$ID),]
-
-# create an annotatedDataFrame to add to ExpressionSet
-pData <- new("AnnotatedDataFrame", data = sexData)
-
-# add the annotatedDataFrame to the Expressionset as phenoData
-phenoData(massi.eset) <- pData
-@
+\begin{Schunk}
+\begin{Sinput}
+> # Get the sex for each sample from the massi.cluster results
+> eset.sample.results <- 
++   data.frame(eset.results[[2]])
+> sexData <- 
++   data.frame(eset.sample.results[c("ID", "sex")])
+> # Exrtact the order of samples in the ExpressionSet and match with results
+> eset.names <- 
++   colnames(exprs(massi.eset))
+> # match the sample order in massiR results to the same as the ExpressionSet object
+> sexData <- sexData[match(eset.names, sexData$ID),]
+> # create an annotatedDataFrame to add to ExpressionSet
+> pData <- new("AnnotatedDataFrame", data = sexData)
+> # add the annotatedDataFrame to the Expressionset as phenoData
+> phenoData(massi.eset) <- pData
+\end{Sinput}
+\end{Schunk}
 
 Check the phenoData is in the ExpressionSet and double check that all sample id's from the massiR analysis match the sample identifiers in the ExpressionSet.
 
-<<>>=
-# check the phenodata is now within the ExpressionSet
-phenoData(massi.eset)
-@
+\begin{Schunk}
+\begin{Sinput}
+> # check the phenodata is now within the ExpressionSet
+> phenoData(massi.eset)
+\end{Sinput}
+\begin{Soutput}
+An object of class 'AnnotatedDataFrame'
+  rowNames: 1 12 ... 57 (60 total)
+  varLabels: ID sex
+  varMetadata: labelDescription
+\end{Soutput}
+\end{Schunk}
 
-<<>>=
-# check that all phenodata id's match expressionSet column names.
-# This must return "TRUE"
-all(massi.eset$ID == colnames(exprs(massi.eset)))
-@
+\begin{Schunk}
+\begin{Sinput}
+> # check that all phenodata id's match expressionSet column names.
+> # This must return "TRUE"
+> all(massi.eset$ID == colnames(exprs(massi.eset)))
+\end{Sinput}
+\begin{Soutput}
+[1] TRUE
+\end{Soutput}
+\end{Schunk}
 
 \section{Using the included massiR y chromosome probe lists}
 
@@ -315,17 +334,27 @@ The massiR package includes lists of y chromosome probes for widely used Illumin
 If you wish to use one of the included probe lists, for example the Illumina human v2 probes:
 
 Load the massiR included probe lists:
-<<load the included probe lists, results=hide>>=
- data(y.probes)
-@
+\begin{Schunk}
+\begin{Sinput}
+>  data(y.probes)
+\end{Sinput}
+\end{Schunk}
 Check the names of the platforms for the probe lists.
-<<y.probes names>>=
-  names(y.probes)
-@
+\begin{Schunk}
+\begin{Sinput}
+>   names(y.probes)
+\end{Sinput}
+\begin{Soutput}
+[1] "illumina_humanwg_6_v1" "illumina_humanwg_6_v2" "illumina_humanwg_6_v1"
+[4] "illumina_humanht_12"   "affy_hugene_1_0_st_v1" "affy_hg_u133_plus_2"  
+\end{Soutput}
+\end{Schunk}
 To get probe list into format for massiR analysis:
-<<results=hide>>=
-  illumina.v2.probes <- data.frame(y.probes["illumina_humanwg_6_v2"])
-@
+\begin{Schunk}
+\begin{Sinput}
+>   illumina.v2.probes <- data.frame(y.probes["illumina_humanwg_6_v2"])
+\end{Sinput}
+\end{Schunk}
 
 The names of the probe lists correspond to Ensembl biomart attribute names.
 For instructions on obtaining probe identifiers for other platforms, see the section "Using biomaRt to obtain y chromosome probe lists"
@@ -336,35 +365,42 @@ Obtaining y chromosome probes lists for many microarray platforms is relatively 
 For example, you can download the probes corresponding to the massiR test data set and obtain the Entrez gene id and genomic positions and convert these into a format for a massiR analysis:
 
 Use the biomaRt package to download genomic regions and Entrez gene id's for Illumina v2 probes:
-<<eval=FALSE>>=
-library(biomaRt)
-mart <- useMart('ensembl', dataset="hsapiens_gene_ensembl")
-filters <- listFilters(mart)
-attributes <- listAttributes(mart)
-
-gene.attributes <- 
- getBM(mart=mart, values=TRUE,
-       filters=c("with_illumina_humanwg_6_v2"),
-       attributes= c("illumina_humanwg_6_v2", "entrezgene",
-                      "chromosome_name", "start_position",
-                      "end_position", "strand"))
-@
+\begin{Schunk}
+\begin{Sinput}
+> library(biomaRt)
+> mart <- useMart('ensembl', dataset="hsapiens_gene_ensembl")
+> filters <- listFilters(mart)
+> attributes <- listAttributes(mart)
+> gene.attributes <- 
++  getBM(mart=mart, values=TRUE,
++        filters=c("with_illumina_humanwg_6_v2"),
++        attributes= c("illumina_humanwg_6_v2", "entrezgene",
++                       "chromosome_name", "start_position",
++                       "end_position", "strand"))
+\end{Sinput}
+\end{Schunk}
 Remove the probes mapped to multiple genomic regions:
-<<eval=FALSE>>=
-unique.probe <- 
-  subset(gene.attributes, subset=!duplicated(gene.attributes[,1]))
-@
+\begin{Schunk}
+\begin{Sinput}
+> unique.probe <- 
++   subset(gene.attributes, subset=!duplicated(gene.attributes[,1]))
+\end{Sinput}
+\end{Schunk}
 Select the probes that correspond to y chromosome genes:
-<<eval=FALSE>>=
-y.unique <- 
-  subset(unique.probe, subset=unique.probe$chromosome_name == "Y")
-@
+\begin{Schunk}
+\begin{Sinput}
+> y.unique <- 
++   subset(unique.probe, subset=unique.probe$chromosome_name == "Y")
+\end{Sinput}
+\end{Schunk}
 
 Get the probe id's as row.names in the format for massiR analysis:
-<<eval=FALSE>>=
-illumina.v2.probes <- 
-  data.frame(row.names=y.unique$illumina_humanwg_6_v2)
-@
+\begin{Schunk}
+\begin{Sinput}
+> illumina.v2.probes <- 
++   data.frame(row.names=y.unique$illumina_humanwg_6_v2)
+\end{Sinput}
+\end{Schunk}
 
 This is a straightforwd way of obtaining Y chromosome probes for many microarray platforms that is independent of platform manufacturer annotations and is highly reccomended.
 

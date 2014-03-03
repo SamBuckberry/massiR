@@ -1,13 +1,13 @@
 library("Biobase")
 
-massi_y <- function(expression.data, y.probes){
+massi_y <- function(expression_data, y_probes){
   
   #Check that the input data is in the correct data.frame or ExpressionSet class
-  class.expression.data <- class(expression.data)
-  class.expression.data <- class.expression.data[1]
-  is.ExpressionSet <- ifelse(class.expression.data == "ExpressionSet", yes=TRUE, no=FALSE)
+  class.expression_data <- class(expression_data)
+  class.expression_data <- class.expression_data[1]
+  is.ExpressionSet <- ifelse(class.expression_data == "ExpressionSet", yes=TRUE, no=FALSE)
   #if(is.ExpressionSet == TRUE) {print("OK: Input expression data as ExpressionSet")}
-  is.data.frame <- ifelse(class.expression.data == "data.frame", yes=TRUE, no=FALSE)
+  is.data.frame <- ifelse(class.expression_data == "data.frame", yes=TRUE, no=FALSE)
   #if(is.data.frame == TRUE) {print("OK: Input expression data as data.frame")}
   
   # test if input data is in accpeted formats, and stop if not.
@@ -15,25 +15,25 @@ massi_y <- function(expression.data, y.probes){
     stop("Input data must be as data.frame or ExpressionSet class")
   }
   
-  # Check class of y.probes  
-  class.y.probes <- class(y.probes)
-  if(class.y.probes != "data.frame") stop("Input y.probes data must be in data.frame class")
+  # Check class of y_probes  
+  class.y_probes <- class(y_probes)
+  if(class.y_probes != "data.frame") stop("Input y_probes data must be in data.frame class")
   
   # If input is in ExpressionSet class, convert to data.frame
-  if(class.expression.data == "ExpressionSet") {
-    expression.data <- data.frame(exprs(expression.data))
-    expression.data$ID <- rownames(expression.data) # set probe as ID
+  if(class.expression_data == "ExpressionSet") {
+    expression_data <- data.frame(exprs(expression_data))
+    expression_data$ID <- rownames(expression_data) # set probe as ID
   }
   
-  if(class.expression.data == "data.frame") {
-    expression.data$ID <- rownames(expression.data) # set probe as ID
+  if(class.expression_data == "data.frame") {
+    expression_data$ID <- rownames(expression_data) # set probe as ID
   }
   
-  # set probe as ID for y.probes
-  y.probes$ID <- row.names(y.probes) 
+  # set probe as ID for y_probes
+  y_probes$ID <- row.names(y_probes) 
   
   # extract matched probes from expression matrix using ID
-  y.values <- as.data.frame(merge(expression.data, y.probes, by="ID")) 
+  y.values <- as.data.frame(merge(expression_data, y_probes, by="ID")) 
   
   # count number of probes with match in dataset
   n.matched.probes <- as.numeric(nrow(y.values))

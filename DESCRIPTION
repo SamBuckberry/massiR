@@ -8,12 +8,12 @@ Maintainer: Sam Buckberry <sam.buckberry@adelaide.edu.au>
 Description: Predicts the sex of samples in gene expression microarray datasets
 License: GPL-3
 Collate:
-    'massi.y.R'
-    'massi.y.plot.R'
-    'massi.select.R'
-    'massi.cluster.R'
-    'massi.cluster.plot.R'
-    'massi.dip.R'
+    'massi_y.R'
+    'massi_y_plot.R'
+    'massi_select.R'
+    'massi_cluster.R'
+    'massi_cluster_plot.R'
+    'massi_dip.R'
 LazyData: true
 Depends: fpc, gplots, diptest, Biobase, R (>= 3.0.2), 
 Suggests: biomaRt, RUnit, BiocGenerics

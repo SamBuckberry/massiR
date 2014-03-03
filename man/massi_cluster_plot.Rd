@@ -12,10 +12,10 @@ massi_cluster_plot(massi_select_data, massi_cluster_data)
 }
 
 \arguments{
-  \item{massi_select.data}{
+  \item{massi_select_data}{
 A data.frame containing the subset of y chromosome probe values for each sample. This is returned when running the massi_select function.
 }
-  \item{massi_cluster.data}{
+  \item{massi_cluster_data}{
 This is the list returned from the massi_cluster function.
 }
 }
