@@ -1,6 +1,6 @@
 library("Biobase")
 
-massi.y <- function(expression.data, y.probes){
+massi_y <- function(expression.data, y.probes){
   
   #Check that the input data is in the correct data.frame or ExpressionSet class
   class.expression.data <- class(expression.data)

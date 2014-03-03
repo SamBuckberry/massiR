@@ -1,13 +1,13 @@
 library("Biobase")
 
-massi.select <- function(expression.data, y.probes, threshold=3) {
+massi_select <- function(expression_data, y_probes, threshold=3) {
   
   #Check that the input data is in the correct data.frame or ExpressionSet class
-  class.expression.data <- class(expression.data)
-  class.expression.data <- class.expression.data[1]
-  is.ExpressionSet <- ifelse(class.expression.data == "ExpressionSet", yes=TRUE, no=FALSE)
+  class.expression_data <- class(expression_data)
+  class.expression_data <- class.expression_data[1]
+  is.ExpressionSet <- ifelse(class.expression_data == "ExpressionSet", yes=TRUE, no=FALSE)
   #if(is.ExpressionSet == TRUE) {print("OK: Input expression data as ExpressionSet")}
-  is.data.frame <- ifelse(class.expression.data == "data.frame", yes=TRUE, no=FALSE)
+  is.data.frame <- ifelse(class.expression_data == "data.frame", yes=TRUE, no=FALSE)
   #if(is.data.frame == TRUE) {print("OK: Input expression data as data.frame")}
   
   # test if input data is in accpeted formats, and stop if not.
@@ -15,18 +15,18 @@ massi.select <- function(expression.data, y.probes, threshold=3) {
     stop("Input data must be as data.frame or ExpressionSet class")
   }
   
-  # Check class of y.probes  
-  class.y.probes <- class(y.probes)
-  if(class.y.probes != "data.frame") stop("Input y.probes data must be in data.frame class")
+  # Check class of y_probes  
+  class.y_probes <- class(y_probes)
+  if(class.y_probes != "data.frame") stop("Input y_probes data must be in data.frame class")
   
   # If input is in ExpressionSet class, convert to data.frame
-  if(class.expression.data == "ExpressionSet") {
-    expression.data <- data.frame(exprs(expression.data))
-    expression.data$ID <- rownames(expression.data) # set probe as ID
+  if(class.expression_data == "ExpressionSet") {
+    expression_data <- data.frame(exprs(expression_data))
+    expression_data$ID <- rownames(expression_data) # set probe as ID
   }
   
-  if(class.expression.data == "data.frame") {
-    expression.data$ID <- rownames(expression.data) # set probe as ID
+  if(class.expression_data == "data.frame") {
+    expression_data$ID <- rownames(expression_data) # set probe as ID
   }
   
   ## Check if threshold is integer between 1:4
@@ -34,11 +34,11 @@ massi.select <- function(expression.data, y.probes, threshold=3) {
   if (!isTRUE(threshold >= 1)) stop("Threshold must be an integer 1,2,3 or 4")
   if (!isTRUE(threshold <= 4)) stop("Threshold must be an integer 1,2,3 or 4")
   
-  # set probe as ID for y.probes
-  y.probes$ID <- row.names(y.probes) 
+  # set probe as ID for y_probes
+  y_probes$ID <- row.names(y_probes) 
   
   # extract matched probes from expression matrix using ID
-  y.values <- as.data.frame(merge(expression.data, y.probes, by="ID")) 
+  y.values <- as.data.frame(merge(expression_data, y_probes, by="ID")) 
   
   # count number of probes with match in dataset
   # This value is to be used for future features not yet implemented
@@ -66,9 +66,9 @@ massi.select <- function(expression.data, y.probes, threshold=3) {
   row.names(y.subset.values) <- NULL
   row.names(y.subset.values) <- y.subset.values$ID
   y.subset.values$ID <- NULL
-  y.subset.values <- y.subset.values
+  y_subset_values <- y.subset.values
   
   # Return Y values and Y subset values as a list
-  return(y.subset.values)
+  return(y_subset_values)
 
 }

@@ -1,23 +1,23 @@
-\name{massi.dip}
-\alias{massi.dip}
+\name{massi_dip}
+\alias{massi_dip}
 
 \title{
-massi.dip
+massi_dip
 }
 \description{
-The massi.dip function applies the dip test to the subset of y chromosome probe values returned from the \code{\link{massi.select}} function. This can be used to indicate if there may be either a male or female bias in the dataset. This function returns a message indicating if the dataset may have a sex bias. The results for massi.dip are not relaible for datasets with 10 or less samples. 
+The massi_dip function applies the dip test to the subset of y chromosome probe values returned from the \code{\link{massi_select}} function. This can be used to indicate if there may be either a male or female bias in the dataset. This function returns a message indicating if the dataset may have a sex bias. The results for massi_dip are not relaible for datasets with 10 or less samples. 
 }
 \usage{
-massi.dip(y.subset.values)
+massi_dip(y_subset_values)
 } 
 
 \arguments{
-  \item{y.subset.values}{
-A data.frame containing the subset of y chromosome probe values for each sample, as returned from the \code{\link{massi.select}} function.
+  \item{y_subset_values}{
+A data.frame containing the subset of y chromosome probe values for each sample, as returned from the \code{\link{massi_select}} function.
 }
 }
 \details{
-This function caclulates z-scores for the y.chromosome probe values returned from the \code{\link{massi.select}} function and then checks if the average z-scores for each sample show a unimodal or multi-modal distribution by applying the dip test. If the proportion of male and female samples in the dataset is relatively balanced, the distribution of average z-scores should be bi-modal. If the distribution looks unimodal, the dataset likely contains a high proportion of one sex. By testing with empirical datasets and randomly generating data subsets with different male/female proportions, guideline values were developed to provide an indication if there is a potential sex bias in the dataset. If the dip statistic is > 0.08 then the dataset is highly likely to have a porportions of male and female samples that will allow the \code{\link{massi.cluster}} function to predict the sex of samples with a high degree of accuracy. The results of this test should only be used as a guide and the results should be interpreted in light of the \code{\link{massi.cluster}} results. For more details see the massi package vignette. 
+This function caclulates z-scores for the y.chromosome probe values returned from the \code{\link{massi_select}} function and then checks if the average z-scores for each sample show a unimodal or multi-modal distribution by applying the dip test. If the proportion of male and female samples in the dataset is relatively balanced, the distribution of average z-scores should be bi-modal. If the distribution looks unimodal, the dataset likely contains a high proportion of one sex. By testing with empirical datasets and randomly generating data subsets with different male/female proportions, guideline values were developed to provide an indication if there is a potential sex bias in the dataset. If the dip statistic is > 0.08 then the dataset is highly likely to have a porportions of male and female samples that will allow the \code{\link{massi_cluster}} function to predict the sex of samples with a high degree of accuracy. The results of this test should only be used as a guide and the results should be interpreted in light of the \code{\link{massi_cluster}} results. For more details see the massi package vignette. 
 }
 \value{
 This function returns a list containing
@@ -36,21 +36,21 @@ Sam Buckberry
 }
 
 \seealso{
-\code{\link{massi.y}, \link{massi.select}, \link{massi.cluster}, \link{massi.y.plot}, \link{massi.cluster.plot}}
+\code{\link{massi_y}, \link{massi_select}, \link{massi_cluster}, \link{massi_y_plot}, \link{massi_cluster_plot}}
 
 }
 \examples{
 \dontrun{
-massi.select.out <- massi.select(expression.data=massi.test.dataset, y.probes=massi.test.probes, threshold=4)
+massi_select_out <- massi_select(expression_data=massi.test.dataset, y.probes=massi.test.probes, threshold=4)
 
 
 # Use the list returned from massi.select to calculate dip statistics and z-scores.
-massi.dip.out <- massi.dip(y.subset.values=massi.select.out)
+massi_dip.out <- massi_dip(y.subset.values=massi_select_out)
 
 # view a density plot
-plot(massi.dip.out[[3]])
+plot(massi_dip_out[[3]])
 
 # view a histogram of z-scores
-hist(x=massi.dip.out[[2]])
+hist(x=massi_dip_out[[2]])
 }
 }

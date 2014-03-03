@@ -1,19 +1,19 @@
-\name{massi.cluster}
-\alias{massi.cluster}
+\name{massi_cluster}
+\alias{massi_cluster}
 
 \title{
-massi.cluster
+massi_cluster
 }
 \description{
-The massi.cluster function predicts the sex of samples using k-medoids clustering.
+The massi_cluster function predicts the sex of samples using k-medoids clustering.
 }
 \usage{
-massi.cluster(y.data)
+massi_cluster(y_data)
 }
 
 \arguments{
-  \item{y.data}{
-the y.data object is the data.frame returned from the \code{\link{massi.select}} function. This is a data.frame with sample names as column names and probe id's as row.names. 
+  \item{y_data}{
+the y_data object is the data.frame returned from the \code{\link{massi_select}} function. This is a data.frame with sample names as column names and probe id's as row.names. 
 }
 }
 \details{
@@ -32,7 +32,7 @@ This function clusters samples into two clusters using y chromosome probe values
 Sam Buckberry
 }
 \seealso{
-\code{\link{massi.y}, \link{massi.select}, \link{massi.y.plot}, \link{massi.dip}, \link{massi.cluster.plot}}
+\code{\link{massi_y}, \link{massi_select}, \link{massi_y_plot}, \link{massi_dip}, \link{massi_cluster_plot}}
 }
 
 \examples{
@@ -40,15 +40,15 @@ Sam Buckberry
 # load the test dataset
 data(massi.test.dataset, massi.test.probes)
 
-# select the y chromosome probes using massi.select
-massi.select.out <- 
-massi.select(massi.test.dataset, massi.test.probes)
+# select the y chromosome probes using massi_select
+massi_select_out <- 
+massi_select(massi.test.dataset, massi.test.probes)
 
-# cluster samples to predict sex using massi.cluster
-massi.cluster.out <- 
-massi.cluster(massi.select.out)
+# cluster samples to predict sex using massi_cluster
+massi_cluster_out <- 
+massi_cluster(massi_select_out)
 
 # get the results in a data.frame format
-data.frame(massi.cluster.out[[2]])
+data.frame(massi_cluster_out[[2]])
 }
 }

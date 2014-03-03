@@ -1,22 +1,22 @@
-\name{massi.cluster.plot}
-\alias{massi.cluster.plot}
+\name{massi_cluster_plot}
+\alias{massi_cluster_plot}
 
 \title{
-massi.cluster.plot
+massi_cluster_plot
 }
 \description{
-This function produces three figures in a new graphics device to enable the exploration of the massi.cluster and massi.select results.
+This function produces three figures in a new graphics device to enable the exploration of the massi_cluster and massi_select results.
 }
 \usage{
-massi.cluster.plot(massi.select.data, massi.cluster.data)
+massi_cluster_plot(massi_select_data, massi_cluster_data)
 }
 
 \arguments{
-  \item{massi.select.data}{
-A data.frame containing the subset of y chromosome probe values for each sample. This is returned when running the massi.select function.
+  \item{massi_select.data}{
+A data.frame containing the subset of y chromosome probe values for each sample. This is returned when running the massi_select function.
 }
-  \item{massi.cluster.data}{
-This is the list returned from the massi.cluster function.
+  \item{massi_cluster.data}{
+This is the list returned from the massi_cluster function.
 }
 }
 \details{
@@ -36,23 +36,23 @@ Sam Buckberry
 }
 
 \seealso{
-\code{\link{massi.cluster}, \link{massi.select}}
+\code{\link{massi_cluster}, \link{massi_select}}
 }
 \examples{
 \dontrun{
 # load the test dataset
 data(massi.test.dataset, massi.test.probes)
 
-# select the y chromosome probes using massi.select
-massi.select.out <- 
-massi.select(massi.test.dataset, massi.test.probes)
+# select the y chromosome probes using massi_select
+massi_select_out <- 
+massi_select(massi.test.dataset, massi.test.probes)
 
-# cluster samples to predict sex using massi.cluster
-massi.cluster.out <- 
-massi.cluster(massi.select.out)
+# cluster samples to predict sex using massi_cluster
+massi_cluster_out <- 
+massi_cluster(massi_select_out)
 
-# produce plots using massi.cluster.plot
-massi.cluster.plot(massi.select.out, massi.cluster.out)
+# produce plots using massi_cluster_plot
+massi_cluster_plot(massi_select_out, massi_cluster_out)
 }
 }
 

@@ -16,7 +16,7 @@ Version: \tab 0.99.0\cr
 Date: \tab 2014-01-27\cr
 License: \tab GPL-3\cr
 }
-The massi analysis requires a typical normalized sample/probe values produced by a microarray experiment. The \code{\link{massi.y}} function will extract the y chromosome probe information and caculate y chromosome probe variance to allow the used to select the most informative probes. Using the \code{\link{massi.select}} function the used can select a probe variation threshold to reduce the number of probes used in the massi.cluster step. The \code{\link{massi.cluster}} function clusters samples into two clusters using the y chromosome probe values. Clustering is performed using the K-medoids method as implimented in the "fpc" package. There are two plotting fucntions, \code{\link{massi.y.plot}} and \code{\link{massi.cluster.plot}}, that allow the user to explore the data at various stages of the analysis. There is also a function, \code{\link{massi.dip}}, that can be used to test if there may be a sample sex-bias in the dataset.
+The massi analysis requires a typical normalized sample/probe values produced by a microarray experiment. The \code{\link{massi_y}} function will extract the y chromosome probe information and caculate y chromosome probe variance to allow the used to select the most informative probes. Using the \code{\link{massi_select}} function the used can select a probe variation threshold to reduce the number of probes used in the massi.cluster step. The \code{\link{massi_cluster}} function clusters samples into two clusters using the y chromosome probe values. Clustering is performed using the K-medoids method as implimented in the "fpc" package. There are two plotting fucntions, \code{\link{massi_y.plot}} and \code{\link{massi_cluster_plot}}, that allow the user to explore the data at various stages of the analysis. There is also a function, \code{\link{massi_dip}}, that can be used to test if there may be a sample sex-bias in the dataset.
 
 }
 \author{
@@ -40,7 +40,7 @@ Maintainer: Sam Buckberry <sam.buckberry@adelaide.edu.au>
 
 \seealso{
 
-\code{\link{massi.y}, \link{massi.select}, \link{massi.cluster}, \link{massi.y.plot}, \link{massi.dip}, \link{massi.cluster.plot}}
+\code{\link{massi_y}, \link{massi_select}, \link{massi_cluster}, \link{massi_y_plot}, \link{massi_dip}, \link{massi_cluster_plot}}
 
 }
 \examples{
@@ -49,19 +49,19 @@ Maintainer: Sam Buckberry <sam.buckberry@adelaide.edu.au>
 data(massi.test.dataset, massi.test.probes)
 
 # use the massi.y function to calculate probe variation
-massi.y.out <- massi.y(expression.data=massi.test.dataset, y.probes=massi.test.probes)
+massi_y_out <- massi_y(expression_data=massi.test.dataset, y_probes=massi.test.probes)
 
 # plot probe variation to aid in deciding on the most informative subset of y chromosome probes
-massi.y.plot(massi.y.out)
+massi_y_plot(massi_y_out)
 
 # Extract the informative probes for clustering 
-massi.select.out <- massi.select(massi.test.dataset, massi.test.probes, threshold=4)
+massi_select_out <- massi_select(massi.test.dataset, massi.test.probes, threshold=4)
 
 # cluster samples to predict the sex for each sample
-massi.cluster.out <- massi.cluster(massi.select.out)
+massi_cluster_out <- massi_cluster(massi_select_out)
 
 # get the predicted sex for each sample
-data.frame(massi.cluster.out[[2]])
+data.frame(massi_cluster_out[[2]])
 }
 }
 

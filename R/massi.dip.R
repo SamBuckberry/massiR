@@ -1,12 +1,12 @@
 library("diptest")
 
-massi.dip <- function(y.subset.values) {
+massi_dip <- function(y_subset_values) {
   
   # Print arning for datasets with less than 10 samples
-  if(as.numeric(ncol(x=y.subset.values)) <10) warning("massi.dip is not reccomended for datasets with <10 samples. Interpret results with caution.")
+  if(as.numeric(ncol(x=y_subset_values)) <10) warning("massi_dip is not reccomended for datasets with <10 samples. Interpret results with caution.")
   
   # Calculate z-scores for each sample
-  z.scores <- scale(t(y.subset.values))
+  z.scores <- scale(t(y_subset_values))
   sample.mean.z.score <- rowMeans(z.scores)  
 
   # calculate dip statistics
