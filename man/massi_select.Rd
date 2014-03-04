@@ -38,9 +38,9 @@ Sam Buckberry
 }
 
 \examples{
-\dontrun{
+
 data(massi.test.dataset, massi.test.probes)
 
-massi_select(expression.data=massi.test.dataset, y.probes=massi.test.probes)
-}
+massi_select(expression_data=massi.test.dataset, y_probes=massi.test.probes)
+
 }

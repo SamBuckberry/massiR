@@ -32,7 +32,7 @@ The y chromosome probes for each platform were downloaded from Ensembl biomart u
   Alvis Brazma and Wolfgang Huber, Bioinformatics 21, 3439-3440 (2005).
 }
 \examples{
-\dontrun{
+
 # load the probes list
 data(y.probes)
 # look at the platform names
@@ -40,6 +40,5 @@ names(y.probes)
 # extract the probes using the platform name
 probe.list <- y.probes[["illumina_humanwg_6_v2"]]
 
-}
 }
 \keyword{datasets}

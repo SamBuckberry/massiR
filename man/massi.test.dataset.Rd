@@ -81,8 +81,6 @@ Data were adapted from dataset GSE25906 <http://www.ncbi.nlm.nih.gov/geo/query/a
 }
 
 \examples{
-\dontrun{
 data(massi.test.dataset)
-}
 }
 \keyword{datasets}

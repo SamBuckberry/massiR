@@ -35,12 +35,12 @@ See vignette for more details.
 
 }
 \examples{
-\dontrun{
+
 data(massi.test.dataset, massi.test.probes)
 
 massi_y_out <-
   massi_y(expression_data=massi.test.dataset, y_probes=massi.test.probes)
   
 massi_y_plot(massi_y_out)
-}
+
 }

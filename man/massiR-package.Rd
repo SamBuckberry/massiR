@@ -44,7 +44,7 @@ Maintainer: Sam Buckberry <sam.buckberry@adelaide.edu.au>
 
 }
 \examples{
-\dontrun{
+
 # load the test datasets
 data(massi.test.dataset, massi.test.probes)
 
@@ -62,6 +62,6 @@ massi_cluster_out <- massi_cluster(massi_select_out)
 
 # get the predicted sex for each sample
 data.frame(massi_cluster_out[[2]])
-}
+
 }
 

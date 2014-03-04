@@ -40,17 +40,19 @@ Sam Buckberry
 
 }
 \examples{
-\dontrun{
-massi_select_out <- massi_select(expression_data=massi.test.dataset, y.probes=massi.test.probes, threshold=4)
 
+# load the test dataset
+data(massi.test.dataset, massi.test.probes)
+
+massi_select_out <- massi_select(expression_data=massi.test.dataset, y_probes=massi.test.probes, threshold=4)
 
 # Use the list returned from massi.select to calculate dip statistics and z-scores.
-massi_dip.out <- massi_dip(y.subset.values=massi_select_out)
+massi_dip_out <- massi_dip(y_subset_values=massi_select_out)
 
 # view a density plot
 plot(massi_dip_out[[3]])
 
 # view a histogram of z-scores
 hist(x=massi_dip_out[[2]])
-}
+
 }

@@ -39,7 +39,7 @@ Sam Buckberry
 \code{\link{massi_cluster}, \link{massi_select}}
 }
 \examples{
-\dontrun{
+
 # load the test dataset
 data(massi.test.dataset, massi.test.probes)
 
@@ -53,6 +53,6 @@ massi_cluster(massi_select_out)
 
 # produce plots using massi_cluster_plot
 massi_cluster_plot(massi_select_out, massi_cluster_out)
-}
+
 }
 

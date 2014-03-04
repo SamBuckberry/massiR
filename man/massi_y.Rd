@@ -40,10 +40,8 @@ Sam Buckberry
 }
 
 \examples{
-\dontrun{
+
 data(massi.test.dataset, massi.test.probes)
 massi_y(massi.test.dataset, massi.test.probes)
 
-
-}
 }

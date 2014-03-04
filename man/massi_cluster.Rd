@@ -36,7 +36,7 @@ Sam Buckberry
 }
 
 \examples{
-\dontrun{
+
 # load the test dataset
 data(massi.test.dataset, massi.test.probes)
 
@@ -50,5 +50,5 @@ massi_cluster(massi_select_out)
 
 # get the results in a data.frame format
 data.frame(massi_cluster_out[[2]])
-}
+
 }

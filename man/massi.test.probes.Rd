@@ -14,8 +14,6 @@ A data.frame containing 56 probes which correspond to y chromosome genes
 }
 
 \examples{
-\dontrun{
 data(massi.test.probes)
-}
 }
 \keyword{datasets}
