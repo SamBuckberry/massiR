@@ -1,0 +1,17 @@
+Package: massiR
+Type: Package
+Title: massiR: MicroArray Sample Sex Identifier
+Version: 0.99.1
+Date: 2014-02-07
+Author: Sam Buckberry
+Maintainer: Sam Buckberry <sam.buckberry@adelaide.edu.au>
+Description: Predicts the sex of samples in gene expression microarray
+        datasets
+License: GPL-3
+Collate: 'massi_y.R' 'massi_y_plot.R' 'massi_select.R'
+        'massi_cluster.R' 'massi_cluster_plot.R' 'massi_dip.R'
+LazyData: true
+Depends: fpc, gplots, diptest, Biobase, R (>= 3.0.2),
+Suggests: biomaRt, RUnit, BiocGenerics
+biocViews: Software, Microarray, GeneExpression, Clustering,
+        Classification, QualityControl

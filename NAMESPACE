@@ -1,0 +1,5 @@
+exportPattern("^[[:alpha:]]+")
+import(fpc)
+import(diptest)
+import(gplots)
+import(Biobase)
