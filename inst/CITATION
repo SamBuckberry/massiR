@@ -1,17 +1,10 @@
-To cite package ‘massiR’ in publications use:
-
-Sam Buckberry, Stephen J Bent, Tina Bianco-Miotto and  Claire T Roberts (2014).
-massiR: a method for predicting the sex of samples in gene expression microarray datasets 
-Bioinformatics, doi: 10.1093/bioinformatics/btu161
-
-
-A BibTeX entry for LaTeX users is
-
-@article{
-         author = {Buckberry, Sam and Bent, Stephen J and Bianco-Miotto, Tina and Roberts, Claire T}, 
-         title = {massiR: a method for predicting the sex of samples in gene expression microarray datasets},
-         year = {2014}, 
-         doi = {10.1093/bioinformatics/btu161}, 
-         URL = {http://bioinformatics.oxfordjournals.org/content/early/2014/03/22/bioinformatics.btu161}, 
-         journal = {Bioinformatics} 
-}
+bibentry(bibtype ="Article",
+         title = "massiR: a method for predicting the sex of samples in gene expression microarray datasets",
+         author = c(person("Sam", "Buckberry"),
+                    person("Stephen J", "Bent"),
+                    person("Tina", "Bianco-Miotto"),
+                    person("Claire T", "Roberts")),
+         year = "2014", 
+         journal = "Bioinformatics",
+         doi = "10.1093/bioinformatics/btu161",
+         URL = "http://bioinformatics.oxfordjournals.org/content/early/2014/03/22/bioinformatics.btu161")
