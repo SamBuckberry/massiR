@@ -1,7 +1,7 @@
 Package: massiR
 Type: Package
 Title: massiR: MicroArray Sample Sex Identifier
-Version: 0.99.1
+Version: 0.99.2
 Date: 2014-02-07
 Author: Sam Buckberry
 Maintainer: Sam Buckberry <sam.buckberry@adelaide.edu.au>
